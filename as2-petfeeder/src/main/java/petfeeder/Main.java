@@ -12,6 +12,7 @@ import petfeeder.exceptions.MealPlanException;
  */
 public class Main {
     private static PetFeeder petFeeder;
+    private static FeedingScheduler feedingScheduler;
 
     /**
      * Prints the main menu and handles user input for 
@@ -24,20 +25,29 @@ public class Main {
         System.out.println("4. Replenish food");
         System.out.println("5. Check food stock");
         System.out.println("6. Dispense meal");
+        System.out.println("7. Configure scheduled feeding");
+        System.out.println("8. Stop scheduled feeding");
         System.out.println("0. Exit\n");
         
         //Get user input
         try {
             int userInput = Integer.parseInt(inputOutput("Please press the number that corresponds to what you would like the pet feeder to do."));
             
-            if (userInput >= 0 && userInput <=6) {
+            if (userInput >= 0 && userInput <=8) {
                 if (userInput == 1) addMealPlan();
                 if (userInput == 2) deleteMealPlan();
                 if (userInput == 3) editMealPlan();
                 if (userInput == 4) replenishFood();
                 if (userInput == 5) checkFoodStock();
                 if (userInput == 6) dispenseMeal();
-                if (userInput == 0) System.exit(0);
+                if (userInput == 7) configureScheduledFeeding();
+                if (userInput == 8) stopScheduledFeeding();
+                if (userInput == 0) {
+                    if (feedingScheduler != null) {
+                        feedingScheduler.shutdown();
+                    }
+                    System.exit(0);
+                }
             } else {
                 System.out.println("Please enter a number from 0 - 6");
                 mainMenu();
@@ -56,9 +66,6 @@ public class Main {
         //Read in meal plan name
         String name = inputOutput("\nPlease enter the meal plan name: ");
         
-        //Read in meal energy cost
-        String costString = inputOutput("\nPlease enter the energy cost: ");
-        
         //Read in amt kibble
         String kibbleString = inputOutput("\nPlease enter the units of kibble in the meal: ");
         
@@ -74,7 +81,6 @@ public class Main {
         MealPlan m = new MealPlan();
         try {
             m.setName(name);
-            m.setEnergyCost(costString);
             m.setAmtKibble(kibbleString);
             m.setAmtWater(waterString);
             m.setAmtWetFood(wetFoodString);
@@ -101,7 +107,8 @@ public class Main {
         MealPlan [] plans = petFeeder.getMealPlans();
         for(int i = 0; i < plans.length; i++) {
             if (plans[i] != null) {
-                System.out.println((i+1) + ". " + plans[i].getName());
+                System.out.println((i+1) + ". " + plans[i].getName()
+                        + " (energy cost: " + plans[i].getEnergyCost() + ")");
             }
         }
         int planToDelete = planListSelection("Please select the number of the meal plan to delete.");
@@ -127,7 +134,8 @@ public class Main {
         MealPlan [] plans = petFeeder.getMealPlans();
         for(int i = 0; i < plans.length; i++) {
             if (plans[i] != null) {
-                System.out.println((i+1) + ". " + plans[i].getName());
+                System.out.println((i+1) + ". " + plans[i].getName()
+                        + " (energy cost: " + plans[i].getEnergyCost() + ")");
             }
         }
         int planToEdit = planListSelection("Please select the number of the meal plan to edit.");
@@ -135,9 +143,6 @@ public class Main {
         if(planToEdit < 0) {
             mainMenu();
         }
-        
-        //Read in meal energy cost
-        String costString = inputOutput("\nPlease enter the energy cost: ");
         
         //Read in amt kibble
         String kibbleString = inputOutput("\nPlease enter the units of kibble in the meal: ");
@@ -153,7 +158,6 @@ public class Main {
         
         MealPlan newPlan = new MealPlan();
         try {
-            newPlan.setEnergyCost(costString);
             newPlan.setAmtKibble(kibbleString);
             newPlan.setAmtWater(waterString);
             newPlan.setAmtWetFood(wetFoodString);
@@ -215,29 +219,74 @@ public class Main {
         MealPlan [] plans = petFeeder.getMealPlans();
         for(int i = 0; i < plans.length; i++) {
             if (plans[i] != null) {
-                System.out.println((i+1) + ". " + plans[i].getName());
+                System.out.println((i+1) + ". " + plans[i].getName()
+                        + " (energy cost: " + plans[i].getEnergyCost() + ")");
             }
         }
         
         int planToPurchase = planListSelection("Please select the number of the meal to dispense.");
-        
-        String energyProvided = inputOutput("Please enter the energy quota provided");
-        int energyInput = 0;
-        try {
-            energyInput = Integer.parseInt(energyProvided);
-        } catch (NumberFormatException e) {
-            System.out.println("Please enter a positive integer");
+
+        boolean dispensed = petFeeder.dispenseMeal(planToPurchase);
+
+        if (dispensed) {
+            System.out.println("Dispensing " + petFeeder.getMealPlans()[planToPurchase].getName());
+            System.out.println("Remaining total energy budget: " + petFeeder.getRemainingEnergyBudget() + " energy points.\n");
+        } else {
+            System.out.println("Insufficient ingredients or energy budget to dispense.\n");
+        }
+        mainMenu();
+    }
+
+    /**
+     * Configure a recurring scheduled feeding.
+     */
+    public static void configureScheduledFeeding() {
+        MealPlan [] plans = petFeeder.getMealPlans();
+        for(int i = 0; i < plans.length; i++) {
+            if (plans[i] != null) {
+                System.out.println((i+1) + ". " + plans[i].getName());
+            }
+        }
+
+        int planToSchedule = planListSelection("Please select the number of the meal to schedule for automatic feeding.");
+
+        if(planToSchedule < 0) {
             mainMenu();
         }
-        
-        int change = petFeeder.dispenseMeal(planToPurchase, energyInput);
-        
-        if (change == energyInput) {
-            System.out.println("Insufficient energy quota or ingredients to dispense.");
-        } else {
-            System.out.println("Dispensing " + petFeeder.getMealPlans()[planToPurchase].getName());
+
+        String periodString = inputOutput("Please enter the interval in seconds between feedings");
+        long periodSeconds = 0;
+        try {
+            periodSeconds = Long.parseLong(periodString);
+            if (periodSeconds <= 0) {
+                System.out.println("Please enter a positive integer for the interval");
+                mainMenu();
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Please enter a positive integer for the interval");
+            mainMenu();
         }
-        System.out.println("Your remaining energy quota is: " + change + "\n");
+
+        if (feedingScheduler == null) {
+            feedingScheduler = new FeedingScheduler(petFeeder);
+        }
+
+        feedingScheduler.scheduleRecurringFeeding(planToSchedule, periodSeconds);
+        System.out.println("Scheduled recurring feeding for " + plans[planToSchedule].getName() +
+                           " every " + periodSeconds + " seconds.\n");
+        mainMenu();
+    }
+
+    /**
+     * Stops the current scheduled feeding, if any.
+     */
+    public static void stopScheduledFeeding() {
+        if (feedingScheduler != null && feedingScheduler.hasActiveSchedule()) {
+            feedingScheduler.stop();
+            System.out.println("Scheduled feeding stopped.\n");
+        } else {
+            System.out.println("No active scheduled feeding.\n");
+        }
         mainMenu();
     }
     
@@ -290,7 +339,9 @@ public class Main {
      */
     public static void main(String[] args) {
         petFeeder = new PetFeeder();
+        feedingScheduler = new FeedingScheduler(petFeeder);
         System.out.println("Welcome to the PetFeeder!\n");
+        System.out.println("Maximum total energy budget for this run: " + petFeeder.getEnergyLimit() + " energy points.\n");
         mainMenu();
     }
 }

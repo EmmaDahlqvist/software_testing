@@ -8,13 +8,18 @@ public class PetFeeder {
     private static MealPlanBook mealPlanBook;
     /** Food container (inventory) of the pet feeder */
     private static FoodContainer foodContainer;
+    /** Simple total energy limit (in the same abstract energy points as meal energyCost). */
+    private static final int ENERGY_LIMIT = 500;
+    /** Energy consumed so far since the feeder was started. */
+    private int energyConsumedSoFar;
     
     /**
-     * Constructor for the pet feeder
+     * Constructor for the pet feeder.
      */
     public PetFeeder() {
         mealPlanBook = new MealPlanBook();
         foodContainer = new FoodContainer();
+        this.energyConsumedSoFar = 0;
     }
     
     /**
@@ -74,28 +79,36 @@ public class PetFeeder {
     }
     
     /**
-     * Returns the remaining energy balance after dispensing a meal, or
-     * the initial energy provided if the meal cannot be dispensed.
+     * Attempts to dispense the selected meal plan.
+     * Returns true if the meal was successfully dispensed and false otherwise.
      * @param mealPlanToPurchase The index of the meal plan selected by the user.
-     * @param energyProvided The amount of energy quota provided by the user system.
-     * @return int The remaining energy balance.
+     * @return boolean True if dispensing succeeded.
      */
-    public synchronized int dispenseMeal(int mealPlanToPurchase, int energyProvided) {
-        int change = 0;
-        
-        if (getMealPlans()[mealPlanToPurchase] == null) {
-            change = energyProvided;
-        } else if (getMealPlans()[mealPlanToPurchase].getEnergyCost() <= energyProvided) {
-            if (foodContainer.useIngredients(getMealPlans()[mealPlanToPurchase])) {
-                change = energyProvided - getMealPlans()[mealPlanToPurchase].getEnergyCost();
-            } else {
-                change = energyProvided;
-            }
+    public synchronized boolean dispenseMeal(int mealPlanToPurchase) {
+        boolean dispensed = false;
+        MealPlan[] plans = getMealPlans();
+
+        if (plans[mealPlanToPurchase] == null) {
+            dispensed = false;
         } else {
-            change = energyProvided;
+            MealPlan selected = plans[mealPlanToPurchase];
+            int mealEnergy = selected.getEnergyCost();
+            int remainingEnergyBudget = ENERGY_LIMIT - energyConsumedSoFar;
+
+            // Require enough remaining total energy budget.
+            if (mealEnergy <= remainingEnergyBudget) {
+                if (foodContainer.useIngredients(selected)) {
+                    energyConsumedSoFar += mealEnergy;
+                    dispensed = true;
+                } else {
+                    dispensed = false;
+                }
+            } else {
+                dispensed = false;
+            }
         }
-        
-        return change;
+
+        return dispensed;
     }
 
     /**
@@ -104,5 +117,21 @@ public class PetFeeder {
      */
     public synchronized MealPlan[] getMealPlans() {
         return mealPlanBook.getMealPlans();
+    }
+
+    /**
+     * Returns the configured total energy limit for this feeder.
+     * @return int
+     */
+    public int getEnergyLimit() {
+        return ENERGY_LIMIT;
+    }
+
+    /**
+     * Returns the remaining energy budget (limit minus energy consumed so far).
+     * @return int
+     */
+    public int getRemainingEnergyBudget() {
+        return ENERGY_LIMIT - energyConsumedSoFar;
     }
 }

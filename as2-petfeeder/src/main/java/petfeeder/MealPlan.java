@@ -15,11 +15,29 @@ public class MealPlan {
      */
     public MealPlan() {
         this.name = "";
-        this.energyCost = 0;
         this.amtKibble = 0;
         this.amtWater = 0;
         this.amtWetFood = 0;
         this.amtTreats = 0;
+        this.energyCost = 0;
+    }
+
+    /** Per-unit energy values (abstract "energy points", can be read as kcal). */
+    private static final int KIBBLE_ENERGY = 10;
+    private static final int WATER_ENERGY = 5;
+    private static final int WETFOOD_ENERGY = 15;
+    private static final int TREATS_ENERGY = 20;
+
+    /**
+     * Recalculates the total energy cost based on ingredient amounts and
+     * fixed per-unit energy values.
+     */
+    private void updateEnergyCost() {
+        this.energyCost =
+                (amtKibble * KIBBLE_ENERGY) +
+                (amtWater * WATER_ENERGY) +
+                (amtWetFood * WETFOOD_ENERGY) +
+                (amtTreats * TREATS_ENERGY);
     }
     
     /**
@@ -44,6 +62,7 @@ public class MealPlan {
         }
         if (amtTreats >= 0) {
             this.amtTreats = amtTreats;
+            updateEnergyCost();
         } else {
             throw new MealPlanException("Units of treats must be a positive integer");
         }
@@ -71,6 +90,7 @@ public class MealPlan {
         }
         if (amtKibble >= 0) {
             this.amtKibble = amtKibble;
+            updateEnergyCost();
         } else {
             throw new MealPlanException("Units of kibble must be a positive integer");
         }
@@ -98,6 +118,7 @@ public class MealPlan {
         }
         if (amtWater >= 0) {
             this.amtWater = amtWater;
+            updateEnergyCost();
         } else {
             throw new MealPlanException("Units of water must be a positive integer");
         }
@@ -125,6 +146,7 @@ public class MealPlan {
         }
         if (amtWetFood >= 0) {
             this.amtWetFood = amtWetFood;
+            updateEnergyCost();
         } else {
             throw new MealPlanException("Units of wet food must be a positive integer");
         }
@@ -155,25 +177,6 @@ public class MealPlan {
     public int getEnergyCost() {
         return energyCost;
     }
-
-    /**
-     * Sets the energy cost of the meal plan.
-     * @param energyCost The energy cost to set (as a string).
-     * @throws MealPlanException if the input is not a positive integer.
-     */
-    public void setEnergyCost(String energyCost) throws MealPlanException{
-        int amtEnergy = 0;
-        try {
-            amtEnergy = Integer.parseInt(energyCost);
-        } catch (NumberFormatException e) {
-            throw new MealPlanException("Energy cost must be a positive integer");
-        }
-        if (amtEnergy >= 0) {
-            this.energyCost = amtEnergy;
-        } else {
-            throw new MealPlanException("Energy cost must be a positive integer");
-        }
-    } 
     
     /**
      * Returns the name of the meal plan.

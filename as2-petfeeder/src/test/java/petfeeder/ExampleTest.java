@@ -17,8 +17,6 @@ public class ExampleTest {
     private PetFeeder pf;
     private MealPlan p1;
     private MealPlan p2;
-    private MealPlan p3;
-    private MealPlan p4;
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -31,34 +29,14 @@ public class ExampleTest {
         p1.setAmtKibble("3");
         p1.setAmtWater("1");
         p1.setAmtWetFood("1");
-        p1.setEnergyCost("50");
         
-        //Set up for p2 (Luxury Mix)
+        //Set up for p2 (Snack Time)
         p2 = new MealPlan();
-        p2.setName("Luxury Mix");
-        p2.setAmtTreats("20");
-        p2.setAmtKibble("3");
+        p2.setName("Snack Time");
+        p2.setAmtTreats("4");
+        p2.setAmtKibble("0");
         p2.setAmtWater("1");
         p2.setAmtWetFood("1");
-        p2.setEnergyCost("75");
-        
-        //Set up for p3 (Hydration Plus)
-        p3 = new MealPlan();
-        p3.setName("Hydration Plus");
-        p3.setAmtTreats("0");
-        p3.setAmtKibble("3");
-        p3.setAmtWater("3");
-        p3.setAmtWetFood("1");
-        p3.setEnergyCost("100");
-        
-        //Set up for p4 (Snack Time)
-        p4 = new MealPlan();
-        p4.setName("Snack Time");
-        p4.setAmtTreats("4");
-        p4.setAmtKibble("0");
-        p4.setAmtWater("1");
-        p4.setAmtWetFood("1");
-        p4.setEnergyCost("65");
     }
     
     @Test
@@ -86,12 +64,39 @@ public class ExampleTest {
                 }
                 );
     }
-    
+
     @Test
-    public void testDispenseMeal_Normal() {
+    public void testMealPlanEnergyCostCalculation() throws Exception {
+        MealPlan meal = new MealPlan();
+        meal.setAmtKibble("2"); // 2 * 10 = 20
+        meal.setAmtWater("1");  // 1 * 5  = 5
+        meal.setAmtWetFood("1"); // 1 * 15 = 15
+        meal.setAmtTreats("0"); // 0 * 20 = 0
+
+        // Expected energy cost: 20 + 5 + 15 + 0 = 40
+        assertEquals(40, meal.getEnergyCost());
+    }
+
+    @Test
+    public void testScheduledFeeding_ChangesStock() throws Exception {
+        // Arrange: add a meal plan that can be dispensed
         pf.addMealPlan(p1);
-        // Cost is 50, Paid 75 -> Change should be 25
-        assertEquals(25, pf.dispenseMeal(0, 75));
+
+        // Initial stock should be the default 15 units for each ingredient
+        String initialStock = pf.checkFoodStock();
+
+        // Act: schedule automatic feeding every 1 second and wait a bit
+        FeedingScheduler scheduler = new FeedingScheduler(pf);
+        scheduler.scheduleRecurringFeeding(0, 1L);
+
+        // Wait long enough for at least one scheduled run
+        Thread.sleep(1500L);
+        scheduler.stop();
+
+        String stockAfter = pf.checkFoodStock();
+
+        // Assert: food stock has changed compared to the initial value
+        assertNotEquals(initialStock, stockAfter);
     }
 
 }
