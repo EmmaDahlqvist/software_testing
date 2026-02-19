@@ -74,7 +74,7 @@ public class MealPlanBookTest {
         // Delete the first meal plan, index 0
         String mealPlanName = mealPlanBook.deleteMealPlan(0);
         MealPlan[] mealPlans = mealPlanBook.getMealPlans();
-        assertEquals(mealPlanName, "Meal1", "The deleted meal plan name should match the expected name");
+        assertEquals("Meal1", mealPlanName, "The deleted meal plan name should match the expected name");
         assertFalse(Arrays.asList(mealPlans).contains(mealPlan), "The meal plan book should no longer contain the deleted meal plan");
     }
 
@@ -109,22 +109,22 @@ public class MealPlanBookTest {
         mealPlanBook.addMealPlan(mealPlan);
         String editedMealPlan = mealPlanBook.editMealPlan(0, mealPlanToReplace);
         MealPlan[] mealPlans = mealPlanBook.getMealPlans();
-        assertEquals(mealPlans[0].getName(), "Meal2", "The meal plan at index 0 should be replaced with the new meal plan");
-        assertEquals(editedMealPlan, "Meal1", "The name of the edited meal");
+        assertEquals("Meal2", mealPlans[0].getName(), "The meal plan at index 0 should be replaced with the new meal plan");
+        assertEquals("Meal1", editedMealPlan, "The name of the edited meal");
     }
 
     @Test
     public void testEditMealPlan_NonExisting() {
         MealPlan mealPlanToReplace = Mockito.mock(MealPlan.class);
         String editedMealPlan = mealPlanBook.editMealPlan(0, mealPlanToReplace);
-        assertEquals(editedMealPlan, null, "Editing a non-existing meal plan should return null");
+        assertNull(editedMealPlan, "Editing a non-existing meal plan should return null");
     }
 
     @Test
     public void testEditMealPlan_NegativeIndex() {
         MealPlan mealPlanToReplace = Mockito.mock(MealPlan.class);
         String editedMealPlan = mealPlanBook.editMealPlan(-1, mealPlanToReplace);
-        assertEquals(editedMealPlan, null, "Editing a non-existing meal plan should return null");
+        assertNull(editedMealPlan, "Editing a non-existing meal plan should return null");
     }
 
     @AfterEach
