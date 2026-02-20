@@ -77,6 +77,7 @@ public class FeedingScheduler {
      * Should be called before the program exits if possible.
      */
     public void shutdown() {
+        stop(); // added in order for the test to work
         executor.shutdownNow();
     }
 }

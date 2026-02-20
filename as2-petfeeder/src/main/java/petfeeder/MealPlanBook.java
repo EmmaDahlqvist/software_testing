@@ -5,7 +5,7 @@ public class MealPlanBook {
     /** Array of meal plans in the pet feeder */
     private MealPlan [] mealPlanArray;
     /** Number of meal plans slots */
-    private final int NUM_MEALPLANS = 4; 
+    private final int NUM_MEALPLANS = 4;
     
     /**
      * Default constructor for a MealPlanBook.
@@ -30,6 +30,12 @@ public class MealPlanBook {
      * @return boolean
      */
     public synchronized boolean addMealPlan(MealPlan m) {
+
+        // Check that meal plan is not null
+        if(m == null) {
+            return false;
+        }
+
         //Assume meal plan doesn't exist in the array until 
         //find out otherwise
         boolean exists = false;
@@ -39,6 +45,7 @@ public class MealPlanBook {
                 exists = true;
             }
         }
+
         //Assume meal plan cannot be added until find an empty
         //spot
         boolean added = false;
@@ -63,7 +70,7 @@ public class MealPlanBook {
     public synchronized String deleteMealPlan(int mealPlanToDelete) {
         if (mealPlanArray[mealPlanToDelete] != null) {
             String name = mealPlanArray[mealPlanToDelete].getName();
-            mealPlanArray[mealPlanToDelete] = new MealPlan();
+            mealPlanArray[mealPlanToDelete] = null;
             return name;
         } else {
             return null;
