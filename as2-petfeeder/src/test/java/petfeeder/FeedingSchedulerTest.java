@@ -7,6 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 /**
  * Tests the FeedingScheduler class
  */
@@ -155,6 +158,35 @@ public class FeedingSchedulerTest {
         assertTrue(feedingScheduler.hasActiveSchedule(), "Schedule should be active after mealplan switch");
     }
 
+    /**
+     * Tests that scheduleRecurringFeeding hits the catch block when dispenseMeal throws an exception,
+     * and that the error message is printed to the console.
+     */
+    @Test
+    public void testScheduleRecurringFeeding_shouldHitCatch() {
+        Mockito.when(petfeeder.dispenseMeal(Mockito.anyInt())).thenThrow(new RuntimeException());
+
+        // Redirect System.out to capture the output for verification
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
+
+        // Schedule a recurring feeding and wait a bit to allow the scheduled task to run and hit the catch block
+        try {
+            feedingScheduler.scheduleRecurringFeeding(0, 1);
+            Thread.sleep(1200);
+
+        } catch (InterruptedException e) {
+            fail("Unexpected InterruptedException: " + e.getMessage());
+        }
+
+        // Get the captured output and verify that it contains the expected error message from the catch block
+        String output = out.toString();
+        assertTrue(output.contains("[Scheduler] Error during scheduled feeding"), "Output should contain error message from catch block");
+    }
+
+    /**
+     * Tears down the test environment by setting the FeedingScheduler instance to null after each test.
+     */
     @AfterEach
     public void tearDown() {
         feedingScheduler = null;

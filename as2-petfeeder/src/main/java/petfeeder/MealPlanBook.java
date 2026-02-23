@@ -85,6 +85,10 @@ public class MealPlanBook {
      * @return String The name of the original meal plan.
      */
     public synchronized String editMealPlan(int mealPlanToEdit, MealPlan newMealPlan) {
+        if(mealPlanToEdit < 0 || mealPlanToEdit >= mealPlanArray.length) {
+            return null;
+        }
+
         if (mealPlanArray[mealPlanToEdit] != null) {
             String name = mealPlanArray[mealPlanToEdit].getName();
             //newMealPlan.setName("");

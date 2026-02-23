@@ -118,11 +118,11 @@ public class PetFeederTest {
     }
 
     /**
-     * Tests that replenishing food updates the stock and that the stock string mentions all food types (ingredients).
-     *
+     * Tests that replenishing food updates the stock and that the amounts of each ingredient are
+     * correctly added to the existing stock when valid input is provided.
      */
     @Test
-    public void testReplenishFood() throws Exception {
+    public void testReplenishFood_GoodInput() throws Exception {
         String initialStock = petFeeder.checkFoodStock();
         String[] v1 = initialStock.replaceAll("[^0-9\n]", "").split("\\n");
         int initialKibble = Integer.parseInt(v1[0]);
