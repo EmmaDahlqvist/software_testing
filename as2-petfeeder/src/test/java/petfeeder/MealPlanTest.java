@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import petfeeder.exceptions.MealPlanException;
 
 /**
- * Testing the MealPlan class
+ * Tests the MealPlan class
  */
 public class MealPlanTest {
 
@@ -192,8 +192,8 @@ public class MealPlanTest {
     public void testSetName_nullInput() {
         String nameBefore = mealPlan.getName();
         mealPlan.setName(null);
-        assertEquals(nameBefore, mealPlan.getName(), "getName should return an empty string when name is set to null");
-        assertEquals(nameBefore, mealPlan.toString(), "toString should return an empty string when name is set to null");
+        assertEquals(nameBefore, mealPlan.getName(), "getName should not change when setName is given null input");
+        assertEquals(nameBefore, mealPlan.toString(), "toString should not change when setName is given null input");
     }
 
     /**
@@ -228,12 +228,19 @@ public class MealPlanTest {
         assertFalse(mealPlan.equals(mealPlan2), "Different objects with different names should not be equal");
     }
 
+    /**
+     * Tests that the equals method returns false when comparing a MealPlan object to null, ensuring that a MealPlan is not considered equal to null.
+     */
     @Test
     public void testEquals_nullObject() {
         mealPlan.setName("A Name");
         assertFalse(mealPlan.equals(null), "Null object should not be equal to a mealplan");
     }
 
+    /**
+     * Tests that the equals method returns false when comparing a MealPlan object to an object of a different class,
+     * ensuring that objects of different types are not considered equal.
+     */
     @Test
     public void testEquals_differentClass() {
         mealPlan.setName("A Name");
@@ -241,7 +248,11 @@ public class MealPlanTest {
         assertFalse(mealPlan.equals(number), "Object of different class should not be equal to a mealplan");
     }
 
-    
+
+    /**
+     * Tests that the equals method returns false when comparing two MealPlan objects where one has a null name and the other does not,
+     * ensuring that a MealPlan with a null name is not considered equal to a MealPlan with a non-null name.
+     */
     @Test
     public void testEquals_nameIsNull() {
         MealPlan mealplan2 = new MealPlan();
@@ -255,7 +266,7 @@ public class MealPlanTest {
      * Tears down the test environment by setting the MealPlan instance to null after each test, ensuring that each test starts with a fresh state.
      */
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         this.mealPlan = null;
     }
 

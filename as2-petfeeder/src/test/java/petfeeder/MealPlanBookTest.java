@@ -8,8 +8,9 @@ import org.mockito.Mockito;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 /**
- * Testing the MealPlanBook class
+ * Tests the MealPlanBook class
  */
 public class MealPlanBookTest {
 
@@ -19,7 +20,7 @@ public class MealPlanBookTest {
      * Sets up the test environment by creating a new MealPlanBook instance before each test.
      */
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         mealPlanBook = new MealPlanBook();
     }
 
@@ -133,7 +134,7 @@ public class MealPlanBookTest {
     }
 
     /**
-     * Test that deleteMealPlan returns null when a negative index is provided
+     * Test that deleteMealPlan returns null a meal plan that has already been deleted is attempted to be deleted again
      */
     @Test
     public void testDeleteMealPlan_AlreadyDeleted() {
@@ -156,12 +157,12 @@ public class MealPlanBookTest {
     @Test
     public void testEditMealPlan_GoodInput() {
         // Meal plan to replace
-        MealPlan mealPlan = Mockito.mock(MealPlan.class);
-        Mockito.when(mealPlan.getName()).thenReturn("Meal1");
+        MealPlan mealPlan = new MealPlan();
+        mealPlan.setName("Meal1");
 
         // New meal plan to replace the old one
-        MealPlan mealPlanToReplace = Mockito.mock(MealPlan.class);
-        Mockito.when(mealPlanToReplace.getName()).thenReturn("Meal2");
+        MealPlan mealPlanToReplace = new MealPlan();
+        mealPlanToReplace.setName("Meal2");
 
         // Adding the first mealplan (index 0)
         mealPlanBook.addMealPlan(mealPlan);
@@ -198,7 +199,7 @@ public class MealPlanBookTest {
      * Tears down the test environment by setting the MealPlanBook instance to null after each test.
      */
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         mealPlanBook = null;
     }
 }

@@ -87,7 +87,7 @@ public class MealPlanBook {
     public synchronized String editMealPlan(int mealPlanToEdit, MealPlan newMealPlan) {
         if (mealPlanArray[mealPlanToEdit] != null) {
             String name = mealPlanArray[mealPlanToEdit].getName();
-            newMealPlan.setName("");
+            //newMealPlan.setName("");
             mealPlanArray[mealPlanToEdit] = newMealPlan;
             return name;
         } else {

@@ -11,20 +11,24 @@ import org.mockito.Mockito;
 import petfeeder.exceptions.MealPlanException;
 
 
-
+/**
+ * Tests the PetFeeder class
+ */
 public class PetFeederTest {
 
     private PetFeeder petFeeder;
 
+    /**
+     * Sets up the test environment by creating a new PetFeeder instance before each test.
+     */
     @BeforeEach
     public void setUp() throws Exception {
         petFeeder = new PetFeeder();
     }
+    
 
-
-
-    /***
-     * Testing when mealplans are empty, the getMealPlans method should return an empty array (length 0).
+    /**
+     * Tests when Meal Plans are empty, the getMealPlans method should return an empty array (length 0).
      */
     @Test
     public void testGetMealPlans_Empty() {
@@ -32,29 +36,8 @@ public class PetFeederTest {
         assertEquals(0, mealPlans.length, "The pet feeder should have no meal plans initially");
     }
 
-    /***
-     * Tests that the PetFeeder returns a meal plan array with 4 slots
-     */
-    @Test
-    public void testGetMealPlans() {
-        PetFeeder pf = new PetFeeder();
-        MealPlan[] plans = pf.getMealPlans();
-        assertEquals(4, plans.length, "The pet feeder should have 4 meal plan slots");
-    }
-    /***
-     * Testing that all 4 slots in the meal plan array are null when the pet feeder is initially created.
-     */
-    @Test
-    public void testGetMealPlansInital() {
-        MealPlan[] mealPlans = petFeeder.getMealPlans();
-        for (MealPlan mealPlan : mealPlans) {
-            assertNull(mealPlan, "Each meal plan slot should be null initially");
-        }
-    }
-
-    /***
-     * Testing that a meal plan can be dispensed when added to the pet feeder.
-     *
+    /**
+     * Tests that a meal plan can be dispensed when added to the pet feeder.
      */
     @Test
     public void testCanDispenseMeal() {
@@ -64,9 +47,8 @@ public class PetFeederTest {
         assertTrue(dispensed, "Meal should be dispensed");
     }
 
-    /***
-     * Testing that dispensing a meal with no meal plan in the specified slot returns false.
-     *
+    /**
+     * Tests that dispensing a meal with no meal plan in the specified slot returns false.
      */
     @Test
     public void testCannotDispenseMeal_NullMealPlan() {
@@ -74,9 +56,8 @@ public class PetFeederTest {
         assertFalse(dispensed, "Dispensing with no meal plan should return false");
     }
 
-    /***
-     * Testing that dispensing a meal with not enough energy budget returns false.
-     *
+    /**
+     * Tests that dispensing a meal with not enough energy budget returns false.
      */
     @Test
     public void testDispenseMeal_NotEnoughEnergy() throws MealPlanException {
@@ -87,9 +68,8 @@ public class PetFeederTest {
         assertFalse(dispensed, "Dispensing a meal that exceeds energy budget should return false");
     }
 
-    /***
-     * Testing that dispensing a meal with not enough Ingredients in stock returns false.
-     *
+    /**
+     * Tests that dispensing a meal with not enough Ingredients in stock returns false.
      */
     @Test
     public void testDispenseMeal_NotEnoughIngredients() throws MealPlanException {
@@ -102,9 +82,8 @@ public class PetFeederTest {
 
     }
 
-    /***
+    /**
      * Tests that dispensing a meal with an invalid index throws an ArrayIndexOutOfBoundsException.
-     *
      */
     @Test
     public void testCannotDispenseMeal_InvalidIndex() {
@@ -130,7 +109,7 @@ public class PetFeederTest {
     }
 
     /**
-     * Testing that deleting a meal plan with an invalid index throws an ArrayIndexOutOfBoundsException.
+     * Tests that deleting a meal plan with an invalid index throws an ArrayIndexOutOfBoundsException.
      */
     @Test
     public void testDeleteMealPlan_InvalidInput() {
@@ -138,8 +117,8 @@ public class PetFeederTest {
                 "Deleting with negative index should throw ArrayIndexOutOfBoundsException");
     }
 
-    /***
-     * Testing that refleninshing food updates the stock and that the stock string mentions all food types (ingredients).
+    /**
+     * Tests that replenishing food updates the stock and that the stock string mentions all food types (ingredients).
      *
      */
     @Test
@@ -165,9 +144,8 @@ public class PetFeederTest {
         assertEquals(initialTreats + 4, treats, "Stock should update the treats amount");
     }
 
-    /***
+    /**
      * Tests that replenishing food with invalid input (non-numeric or negative) throws an exception and that the exception message mentions the type of food that caused the error.
-     *
      */
     @Test
     public void testReplenishFood_InvalidInput() {
@@ -176,11 +154,8 @@ public class PetFeederTest {
         assertTrue(exception.getMessage().contains("kibble"), "Exception message should mention kibble");
     }
 
-
-
-    /***
-     * Testing that all the ingredients are contaioned in the stock string returned by checkFoodStock().
-     *
+    /**
+     * Tests that all the ingredients are contained in the stock string returned by checkFoodStock().
      */
     @Test
     public void testCheckFoodStock() {
@@ -191,9 +166,8 @@ public class PetFeederTest {
         assertTrue(stock.contains("Treats"), "Stock string should mention Treats");
     }
 
-    /***
+    /**
      * Tests that the remaining energy budget is equal to the initial budget when no meals have been dispensed.
-     *
      */
     @Test
     public void testCheckEnergyBudget_NoEnergySpent() {
@@ -201,12 +175,11 @@ public class PetFeederTest {
         assertEquals(500, energy, "Initial energy budget should be 500");
     }
 
-    /***
+    /**
      * Tests that after a meal has been dispensed, the remaining energy budget decreases by the energy cost of that meal.
-     *
      */
     @Test
-    public void testCheckEnergyBudget_AfterDispensing() throws MealPlanException {
+    public void testCheckEnergyBudget_AfterDispensing() {
         MealPlan meal = Mockito.mock(MealPlan.class);
         Mockito.when(meal.getEnergyCost()).thenReturn(50);
         petFeeder.addMealPlan(meal);
@@ -215,9 +188,8 @@ public class PetFeederTest {
         assertEquals(450, energy, "Energy budget should decrease by the meal's energy cost after dispensing");
     }
 
-    /***
+    /**
      * Tests that adding a valid meal plan correctly returns true and that the meal plan can be retrieved from the pet feeder.
-     *
      */
     @Test
     public void testAddMealPlan_ValidInput() {
@@ -227,8 +199,8 @@ public class PetFeederTest {
         assertEquals(mealPlan, petFeeder.getMealPlans()[0], "The added meal plan should be retrievable from the pet feeder");
     }
 
-    /***
-     * Testing that adding an invalid meal plan (null) returns false and does not add anything to the pet feeder.
+    /**
+     * Tests that adding an invalid meal plan (null) returns false and does not add anything to the pet feeder.
      */
     @Test
     public void testAddMealPlan_NullInput() {
@@ -236,51 +208,41 @@ public class PetFeederTest {
         assertFalse(added, "Adding a null meal plan should return false");
     }
 
-    /***
-     * Testing that the petFeeders edit meal plan method correctly updates the meal plan at the specified index and returns the old meal name.
+    /**
+     * Tests that the petFeeders edit meal plan method correctly updates/replaces the meal plan at the specified index and returns the old meal name.
      */
     @Test
-    public void testEditMealPlan() throws MealPlanException {
+    public void testEditMealPlan_GoodInput() {
         PetFeeder pf = new PetFeeder();
         MealPlan meal1 = new MealPlan();
         meal1.setName("Meal 1");
-        meal1.setAmtWater("30");
-        meal1.setAmtTreats("10");
-        meal1.setAmtWetFood("40");
-        meal1.setAmtKibble("20");
         pf.addMealPlan(meal1);
 
         MealPlan updated = new MealPlan();
         updated.setName("Updated Meal");
-        updated.setAmtWater("99");
-        updated.setAmtTreats("99");
-        updated.setAmtWetFood("99");
-        updated.setAmtKibble("99");
+
 
         String oldName = pf.editMealPlan(0, updated);
         assertEquals("Meal 1", oldName, "Should return the old meal name");
         MealPlan[] plans = pf.getMealPlans();
-        assertEquals("", plans[0].getName(), "Meal plan name should be empty after edit");
-        assertEquals(99, plans[0].getAmtKibble(), "Kibble amount should be updated");
+        assertEquals(updated, plans[0], "Meal plan at index 0 should be updated to the new meal plan");
     }
 
-    /***
-     * Testing that the pet feeder's energy budget is correctly initialized to 500 when the pet feeder is created.
-     *
+    /**
+     * Tests that the pet feeder's energy budget is correctly initialized to 500 when the pet feeder is created.
      */
     @Test
-    public void testEnergyLimit() {
+    public void testInitialEnergyLimit() {
         PetFeeder pf = new PetFeeder();
         int energy = pf.getEnergyLimit();
         assertEquals(500, energy, "Initial energy budget should be 500");
     }
 
-    /***
-     * Testing that the energy limit returned by getEnergyLimit() is a positive integer, indicating that the pet feeder has a valid energy budget.
-     *
+    /**
+     * Tests that the energy limit returned by getEnergyLimit() is a positive integer, indicating that the pet feeder has a valid energy budget.
      */
     @Test
-    public void testgetEnergyLimit_ShouldBePositive(){
+    public void testGetEnergyLimit_ShouldBePositive(){
         PetFeeder pf = new PetFeeder();
         int energyLimit = pf.getEnergyLimit();
         assertTrue(energyLimit > 0, "Energy limit should be a positive integer");

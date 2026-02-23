@@ -9,7 +9,7 @@ import org.mockito.Mockito;
 import petfeeder.exceptions.FoodStockException;
 
 /**
- * Testing the FoodContainer class
+ * Tests the FoodContainer class
  */
 public class FoodContainerTest {
 
@@ -24,7 +24,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that the initial kibble amount in the food container is 15.
+     * Tests that the initial kibble amount in the food container is 15.
      */
     @Test
     public void testInitialKibbleAmount() {
@@ -32,7 +32,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that the initial water amount in the food container is 15.
+     * Tests that the initial water amount in the food container is 15.
      */
     @Test
     public void testInitialWaterAmount() {
@@ -40,7 +40,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that the initial wet food amount in the food container is 15.
+     * Tests that the initial wet food amount in the food container is 15.
      */
     @Test
     public void testInitialWetFoodAmount() {
@@ -48,7 +48,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that the initial treats amount in the food container is 15.
+     * Tests that the initial treats amount in the food container is 15.
      */
     @Test
     public void testInitialTreatsAmount() {
@@ -57,7 +57,7 @@ public class FoodContainerTest {
 
 
     /**
-     * Test that adding a valid amount of wet food increases the wet food stock in the container.
+     * Tests that adding a valid amount of wet food increases the wet food stock in the container.
      */
     @Test
     public void testAddWetFood_ValidInput() throws Exception{
@@ -67,7 +67,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that adding a negative amount of wet food throws a FoodStockException.
+     * Test thats adding a negative amount of wet food throws a FoodStockException.
      */
     @Test
     public void testAddWetFood_NegativeInput() {
@@ -75,7 +75,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that adding a non-numeric amount of wet food throws a FoodStockException.
+     * Tests that adding a non-numeric amount of wet food throws a FoodStockException.
      */
     @Test
     public void testAddWetFood_NonNumericInput(){
@@ -83,7 +83,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that adding a valid amount of treats increases the treats stock in the container.
+     * Tests that adding a valid amount of treats increases the treats stock in the container.
      */
     @Test
     public void testAddTreats_ValidInput() throws Exception{
@@ -93,7 +93,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that adding a negative amount of treats throws a FoodStockException.
+     * Tests that adding a negative amount of treats throws a FoodStockException.
      */
     @Test
     public void testAddTreats_NegativeInput() {
@@ -101,7 +101,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that adding a non-numeric amount of treats throws a FoodStockException.
+     * Tests that adding a non-numeric amount of treats throws a FoodStockException.
      */
     @Test
     public void testAddTreats_NonNumericInput() {
@@ -109,7 +109,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that adding a valid amount of kibble increases the kibble stock in the container.
+     * Tests that adding a valid amount of kibble increases the kibble stock in the container.
      */
     @Test
     public void testAddKibble_ValidInput() throws Exception{
@@ -119,7 +119,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that adding a negative amount of kibble throws a FoodStockException.
+     * Tests that adding a negative amount of kibble throws a FoodStockException.
      */
     @Test
     public void testAddKibble_NegativeInput() {
@@ -127,7 +127,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that adding a non-numeric amount of kibble throws a FoodStockException.
+     * Tests that adding a non-numeric amount of kibble throws a FoodStockException.
      */
     @Test
     public void testAddKibble_NonNumericInput() {
@@ -135,7 +135,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that adding a valid amount of water increases the water stock in the container.
+     * Tests that adding a valid amount of water increases the water stock in the container.
      */
     @Test
     public void testAddWater_ValidInput() throws Exception{
@@ -145,7 +145,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that adding a negative amount of water throws a FoodStockException.
+     * Tests that adding a negative amount of water throws a FoodStockException.
      */
     @Test
     public void testAddWater_NegativeInput() {
@@ -153,7 +153,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that adding a non-numeric amount of water throws a FoodStockException.
+     * Tests that adding a non-numeric amount of water throws a FoodStockException.
      */
     @Test
     public void testAddWater_NonNumericInput() {
@@ -161,7 +161,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that using ingredients for a valid meal plan decreases the food stock in the container accordingly.
+     * Tests that using ingredients for a valid meal plan decreases the food stock in the container accordingly.
      */
     @Test
     public void testUseIngredients_ValidInput() {
@@ -192,7 +192,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that using ingredients for a meal plan that requires more ingredients than are in stock
+     * Tests that using ingredients for a meal plan that requires more ingredients than are in stock
      * does not change the food stock in the container and returns false.
      */
     @Test
@@ -222,7 +222,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that using ingredients with a null meal plan throws an exception, since the method should not accept a null meal plan as valid input.
+     * Tests that using ingredients with a null meal plan throws an exception, since the method should not accept a null meal plan as valid input.
      */
     @Test
     public void testUseIngredients_InvalidMealPlan() {
@@ -232,7 +232,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that setting a valid amount of treats updates the treats stock in the container.
+     * Tests that setting a valid amount of treats updates the treats stock in the container.
      */
     @Test
     public void testSetTreats_ValidInput() {
@@ -241,7 +241,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that setting a negative amount of treats does not change the treats stock in the container,
+     * Tests that setting a negative amount of treats does not change the treats stock in the container,
      * since the method should not accept negative values as valid input.
      */
     @Test
@@ -252,7 +252,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that setting a valid amount of kibble updates the kibble stock in the container.
+     * Tests that setting a valid amount of kibble updates the kibble stock in the container.
      */
     @Test
     public void testSetKibble_ValidInput() {
@@ -261,7 +261,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that setting a negative amount of kibble does not change the kibble stock in the container,
+     * Tests that setting a negative amount of kibble does not change the kibble stock in the container,
      * since the method should not accept negative values as valid input.
      */
     @Test
@@ -272,7 +272,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that setting a valid amount of water updates the water stock in the container.
+     * Tests that setting a valid amount of water updates the water stock in the container.
      */
     @Test
     public void testSetWater_ValidInput() {
@@ -281,7 +281,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that setting a negative amount of water does not change the water stock in the container,
+     * Tests that setting a negative amount of water does not change the water stock in the container,
      * since the method should not accept negative values as valid input.
      */
     @Test
@@ -292,7 +292,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that setting a valid amount of wet food updates the wet food stock in the container.
+     * Tests that setting a valid amount of wet food updates the wet food stock in the container.
      */
     @Test
     public void testSetWetFood_ValidInput() {
@@ -301,7 +301,7 @@ public class FoodContainerTest {
     }
 
     /**
-     * Test that setting a negative amount of wet food does not change the wet food stock in the container,
+     * Tests that setting a negative amount of wet food does not change the wet food stock in the container,
      * since the method should not accept negative values as valid input.
      */
     @Test
@@ -312,8 +312,8 @@ public class FoodContainerTest {
     }
 
     /**
-     * Testing when foodcontainer has all ingredients the mealplan requires,
-     * and more, that the enough ingredients method should return true.
+     * Tests when foodcontainer has all ingredients the mealplan requires,
+     * and more, that the enoughIngredients method should return true.
      */
     @Test
     public void testEnoughIngredients_NormalCase_ShouldBeTrue() {
@@ -328,8 +328,8 @@ public class FoodContainerTest {
         assertTrue(foodContainer.enoughIngredients(meal), "Should have enough ingredients for the meal");
     }
 
-    /***
-     * Testing when foodcontainer has all just enough ingredients for the mealplan, that the enough ingredients method should return true.
+    /**
+     * Tests when foodcontainer has all just enough ingredients for the mealplan, that the enough ingredients method should return true.
      */
     @Test
     public void testEnoughIngredients_EdgeCase_ShouldBeTrue() {
@@ -344,8 +344,8 @@ public class FoodContainerTest {
         assertTrue(foodContainer.enoughIngredients(meal), "Should have enough ingredients for the meal");
     }
 
-    /***
-     * Testing when foodcontainer has all ingredients the mealplan requires exept for Kibble that the enough ingredients method should return false.
+    /**
+     * Tests when foodcontainer has all ingredients the mealplan requires except for Kibble that the enough ingredients method should return false.
      */
     @Test
     public void testEnoughIngredients_NotEnoughKibble_ShouldBeFalse() {
@@ -358,8 +358,8 @@ public class FoodContainerTest {
         assertFalse(foodContainer.enoughIngredients(meal), "Should not have enough kibble for the meal");
     }
 
-    /***
-     * Testing when foodcontainer has all ingredients the mealplan requires except for Water that the enough ingredients method should return false.
+    /**
+     * Tests when foodcontainer has all ingredients the mealplan requires except for Water that the enough ingredients method should return false.
      */
     @Test
     public void testEnoughIngredients_NotEnoughWater_ShouldBeFalse() {
@@ -375,9 +375,8 @@ public class FoodContainerTest {
         assertFalse(foodContainer.enoughIngredients(meal), "Should not have enough water for the meal");
     }
 
-    /***
-     * Testing when foodcontainer has all ingredients the mealplan requires except for WetFood that the enough ingredients method should return false.
-     *
+    /**
+     * Tests when foodcontainer has all ingredients the mealplan requires except for WetFood that the enough ingredients method should return false.
      */
     @Test
     public void testEnoughIngredients_NotEnoughWetFood_ShouldBeFalse() {
@@ -393,9 +392,8 @@ public class FoodContainerTest {
         assertFalse(foodContainer.enoughIngredients(meal), "Should not have enough wet food for the meal");
     }
 
-    /***
-     * Testing when foodcontainer has all ingredients the mealplan requires exept for treats that the enough ingredients method should return false.
-     *
+    /**
+     * Tests when foodcontainer has all ingredients the mealplan requires exept for treats that the enough ingredients method should return false.
      */
     @Test
     public void testEnoughIngredients_NotEnoughTreats_ShouldBeFalse() {
@@ -411,8 +409,8 @@ public class FoodContainerTest {
         assertFalse(foodContainer.enoughIngredients(meal), "Should not have enough wet food for the meal");
     }
 
-    /***
-     * Testing that the toString method returns the correct string.
+    /**
+     * Tests that the toString method returns the correct string.
      */
     @Test
     public void testToString() {
@@ -424,7 +422,7 @@ public class FoodContainerTest {
      * Tears down the test environment by setting the FoodContainer instance to null after each test.
      */
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown()  {
         foodContainer = null;
     }
 }
